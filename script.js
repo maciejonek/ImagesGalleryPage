@@ -56,8 +56,10 @@ function addPhotos(data){
     
 }
 function showLightbox(id){
+    bodyBackgroundColorToggler();
     $('#album').toggleClass("hide");
     $('#lightbox').toggleClass("hide");
+   
     getLightboxPhoto(id);
 }
 
@@ -70,10 +72,57 @@ function getLightboxPhoto(id){
 }
 
 function openLightbox(url){
+    
     $('#lightbox').append(
             $('<img></img>')
             .attr('src', url));
+    
 }
 
+function bodyBackgroundColorToggler(){
+    if($('body').css("background-color")=='rgb(47, 47, 47)')
+        $('body').css("background-color", 'rgb(255,255,255)');
+    else
+        $('body').css("background-color",'rgb(47, 47, 47)');
+}
 
+function returnButton(){
+    if(!$('#formBox').hasClass('hide')){
+        // console.log(1);
+        $('#album').toggleClass('hide');
+        $('#formBox').toggleClass('hide');
+    }
+    else if($('#lightbox').hasClass('hide')){
+        // console.log(2);
+        $('#album').toggleClass('hide');
+        $('#album').children().not(".returnButton, .postForm").remove();
+        $('#gallery').toggleClass('hide');
+    }
+    else{
+        // console.log(3);
+        bodyBackgroundColorToggler();
+        $('#lightbox').toggleClass('hide');
+        $('#lightbox').children().not(".returnButton").remove();
+        $('#album').toggleClass('hide');
 
+    }
+
+}
+
+function openForm(){
+    $('#formBox').toggleClass('hide');
+    $('#album').toggleClass('hide');
+}
+
+function validateFileType() {
+    var fileName = $("#fileName").val();
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "gif") {
+      $('.form').append(`<p>${fileName.replace('C:\\fakepath\\','')}</p>`)
+    } else {
+      alert("Only jpg, jpeg, png and gif files are allowed!");
+      $('#fileName').val('');
+      $('#fileName').attr('accept',".jpg,.jpeg,.png,.gif");
+    }
+  }

@@ -4,19 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     
-    <title>Document</title>
+    <title>Gallery</title>
 </head>
 <body>
     <div id="gallery">
-
+        
     </div>
+    
     <div id="album" class="hide">
-    <div class="returnButton">X</div>
+        <div class="returnButton" onclick="returnButton()">X</div>
+        <div class="postForm fa fa-upload" onclick="openForm()"></div>
+    </div>
+    <div id="formBox" class="hide">
+        <div class="returnButton" onclick="returnButton()">X</div>
+        <form class="form">
+            <label for="title">Title:</label>
+            <input type="title" name="title" id="title">
+            <input type="file" name="file" id="fileName" accept=".jpg,.jpeg,.png,.gif" onchange="validateFileType()">
+            <input type="submit" value="wyslij">
+        </form>
     </div>
     <div id="lightbox" class="hide">
-    <div class="returnButton">X</div>
+        <div class="returnButton" onclick="returnButton()">X</div>
     </div> 
 </body>
 </html>
