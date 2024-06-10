@@ -25,7 +25,8 @@ function addAlbums(data){
 }
 function showAlbum(id){
     $('#gallery').toggleClass('hide');
-    $('#album').toggleClass("hide");
+    $('.albumBox').toggleClass("hide");
+    $('.albumBox').attr('id',id);
     getPhotos(id);
 
 }
@@ -40,7 +41,7 @@ function getPhotos(id){
 
 function addPhotos(data){
     for(let photo of data){
-        $('#album').append(
+        $('.albumBox').append(
             $('<div></div>')
             .addClass('photo')
             .append(
@@ -57,7 +58,7 @@ function addPhotos(data){
 }
 function showLightbox(id){
     bodyBackgroundColorToggler();
-    $('#album').toggleClass("hide");
+    $('.albumBox').toggleClass("hide");
     $('#lightbox').toggleClass("hide");
    
     getLightboxPhoto(id);
@@ -89,13 +90,13 @@ function bodyBackgroundColorToggler(){
 function returnButton(){
     if(!$('#formBox').hasClass('hide')){
         // console.log(1);
-        $('#album').toggleClass('hide');
+        $('.albumBox').toggleClass('hide');
         $('#formBox').toggleClass('hide');
     }
     else if($('#lightbox').hasClass('hide')){
         // console.log(2);
-        $('#album').toggleClass('hide');
-        $('#album').children().not(".returnButton, .postForm").remove();
+        $('.albumBox').toggleClass('hide');
+        $('.albumBox').children().not(".returnButton, .postForm").remove();
         $('#gallery').toggleClass('hide');
     }
     else{
@@ -103,7 +104,7 @@ function returnButton(){
         bodyBackgroundColorToggler();
         $('#lightbox').toggleClass('hide');
         $('#lightbox').children().not(".returnButton").remove();
-        $('#album').toggleClass('hide');
+        $('.albumBox').toggleClass('hide');
 
     }
 
@@ -111,7 +112,7 @@ function returnButton(){
 
 function openForm(){
     $('#formBox').toggleClass('hide');
-    $('#album').toggleClass('hide');
+    $('.albumBox').toggleClass('hide');
 }
 
 function validateFileType() {
@@ -119,10 +120,45 @@ function validateFileType() {
     var idxDot = fileName.lastIndexOf(".") + 1;
     var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
     if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "gif") {
-      $('.form').append(`<p>${fileName.replace('C:\\fakepath\\','')}</p>`)
+      $('#file').text(fileName.replace('C:\\fakepath\\',''));
     } else {
       alert("Only jpg, jpeg, png and gif files are allowed!");
       $('#fileName').val('');
       $('#fileName').attr('accept',".jpg,.jpeg,.png,.gif");
     }
   }
+
+function readForm(){
+    $('.form').on('submit', function(event){
+        event.preventDefault();
+        var formInvalid = false;
+        $('.form>input').each(function() {
+        if ($(this).val() === '') {
+            formInvalid = true;
+        }
+        });
+
+        if (!formInvalid){
+        var formData = {
+            albumId: $('.albumBox').attr('id'),
+            title: $('#title').val(),
+            url: $('#fileName').val(),
+            thumbnailUrl: $('#fileName').val()
+        }
+        $.ajax({
+            type: "POST",
+            url: "https://jsonplaceholder.typicode.com/photos",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                console.log('Response:', response);
+            }
+        });
+        console.log(formData);
+        $('.form').each(function () { 
+             this.reset();
+        });
+        $('#file').remove()
+        }
+    })
+}

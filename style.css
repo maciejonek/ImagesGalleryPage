@@ -5,7 +5,7 @@ body{
     height: 100%;
 }
 
-#gallery, #album, #lightbox {
+#gallery, .albumBox, #lightbox {
     padding: 5px;
     width: 100%;
     height: 100%;
@@ -15,7 +15,7 @@ body{
 }
 
 
-#album, #lightbox {
+.albumBox, #lightbox {
     margin-top: 60px;
 }
 
