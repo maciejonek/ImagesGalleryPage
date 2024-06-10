@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-    getAlbums();
-
+    apiGet("https://jsonplaceholder.typicode.com/albums",addAlbums)
 });
 
-function getAlbums(){
-    $.get("https://jsonplaceholder.typicode.com/albums",
+function apiGet(url, func){
+    $.get(url,
         function (data){
-            addAlbums(data);
+            func(data);
         }
     );
 }
@@ -27,17 +26,11 @@ function showAlbum(id){
     $('#gallery').toggleClass('hide');
     $('.albumBox').toggleClass("hide");
     $('.albumBox').attr('id',id);
-    getPhotos(id);
+    apiGet("https://jsonplaceholder.typicode.com/photos?albumId="+id,addPhotos)
 
 }
 
-function getPhotos(id){
-    $.get("https://jsonplaceholder.typicode.com/photos?albumId="+id,
-        function (data){
-            addPhotos(data);
-        }
-    );
-}
+
 
 function addPhotos(data){
     for(let photo of data){
@@ -60,23 +53,14 @@ function showLightbox(id){
     bodyBackgroundColorToggler();
     $('.albumBox').toggleClass("hide");
     $('#lightbox').toggleClass("hide");
-   
-    getLightboxPhoto(id);
+    apiGet("https://jsonplaceholder.typicode.com/photos/"+id,openLightbox);
 }
 
-function getLightboxPhoto(id){
-    $.get("https://jsonplaceholder.typicode.com/photos/"+id,
-        function (data){
-            openLightbox(data.url);
-        }
-    );
-}
-
-function openLightbox(url){
+function openLightbox(data){
     
     $('#lightbox').append(
             $('<img></img>')
-            .attr('src', url));
+            .attr('src', data.url));
     
 }
 
@@ -89,18 +73,15 @@ function bodyBackgroundColorToggler(){
 
 function returnButton(){
     if(!$('#formBox').hasClass('hide')){
-        // console.log(1);
         $('.albumBox').toggleClass('hide');
         $('#formBox').toggleClass('hide');
     }
     else if($('#lightbox').hasClass('hide')){
-        // console.log(2);
         $('.albumBox').toggleClass('hide');
         $('.albumBox').children().not(".returnButton, .postForm").remove();
         $('#gallery').toggleClass('hide');
     }
     else{
-        // console.log(3);
         bodyBackgroundColorToggler();
         $('#lightbox').toggleClass('hide');
         $('#lightbox').children().not(".returnButton").remove();
