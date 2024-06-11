@@ -20,6 +20,7 @@ function addAlbums(data){
             .attr("onclick","showAlbum(this.id)")
             .text(album.title));
     }
+    heightChanger();
     
 }
 function showAlbum(id){
@@ -141,5 +142,15 @@ function readForm(){
         });
         $('#file').remove()
         }
+    })
+}
+
+function heightChanger(){
+    let max = 0;
+    $('.album').each(function (index, elem){
+        if($(elem).height()>max) max = $(elem).height();
+    })
+    $('.album').each(function (index, elem){
+        $(elem).height(max);
     })
 }
